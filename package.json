@@ -3,5 +3,8 @@
   "description": "Synchronization framework",
   "version": "1.0.0",
   "author": "Vojto Rinik <vojto@rinik.net>",
-  "main" : "./index.js"
+  "main" : "./index.js",
+  "dependencies": {
+    "coffee-script": "1.3.3"
+  }
 }
