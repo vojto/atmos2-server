@@ -1,0 +1,7 @@
+{
+  "name": "atmos2-server",
+  "description": "Synchronization framework",
+  "version": "1.0.0",
+  "author": "Vojto Rinik <vojto@rinik.net>",
+  "main" : "./index.js"
+}
