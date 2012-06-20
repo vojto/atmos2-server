@@ -20,8 +20,8 @@ class Service
     console.log user._id
     object._user_id = new ObjectId(user._id)
     collection = @app.collection(entity)
-    collection.insert(object)
-    data = @serialize_object(object)
+    await collection.insert object, defer err, result
+    data = @serialize_object(result)
     callback(null, data)
 
   update: (user, entity, id, object, callback) ->
@@ -32,6 +32,7 @@ class Service
     collection = @app.collection(entity)
     criteria   = {_id: new ObjectId(id), _user_id: new ObjectId(user._id)}
     collection.update criteria, object, (err) =>
+      object._id = id
       return callback(err) if err
       data = @serialize_object(object)
       callback(null, data)
