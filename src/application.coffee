@@ -1,5 +1,6 @@
 fs        = require('fs')
 
+io        = require('socket.io')
 Express   = require('express')
 Mongolian = require('mongolian')
 ObjectId  = Mongolian.ObjectId
@@ -32,6 +33,9 @@ class Application extends Server
     @_http.use(Express.bodyParser())
     @_http.use(Express.cookieParser());
     @_http.use(Express.session({secret: "foobar"}))
+
+    @_socketio = io.listen(@_http)
+    @_socketio.sockets.on 'connection', @did_connect
 
     # Services -- only users in this case
     @_users = new Users(@)
@@ -110,5 +114,12 @@ class Application extends Server
     await @_users.create params, defer err, user
     delete user.encoded_password if user
     @_send(res, err, user)
+
+  # -^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-
+  # Socket callbacks
+  # ---------------------------------------------------------------------------
+
+  did_connect: (client) ->
+    log2 'client connected'
 
 module.exports = Application
