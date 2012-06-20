@@ -10,9 +10,6 @@ Users           = require('./user_service')
 
 is_production = process.env.NODE_ENV == 'production'
 
-# Third-party modules
-
-
 #        __
 #       ()'`;
 #       /\|`
