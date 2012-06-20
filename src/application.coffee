@@ -119,7 +119,11 @@ class Application extends Server
   # Socket callbacks
   # ---------------------------------------------------------------------------
 
-  did_connect: (client) ->
+  did_connect: (client) =>
     log2 'client connected'
+
+  push_update: (collection, id, object) ->
+    payload = {collection: collection, id: id, object: object}
+    @_socketio.sockets.emit 'update', payload
 
 module.exports = Application

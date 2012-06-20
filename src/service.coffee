@@ -31,9 +31,10 @@ class Service
     object._user_id = new ObjectId(user._id)
     collection = @app.collection(entity)
     criteria   = {_id: new ObjectId(id), _user_id: new ObjectId(user._id)}
-    collection.update criteria, object, (err) ->
+    collection.update criteria, object, (err) =>
       return callback(err) if err
-      callback(null, object)
+      data = @serialize_object(object)
+      callback(null, data)
 
   del: (user, entity, id, callback) ->
     log "delete:", entity, id
