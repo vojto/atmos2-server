@@ -15,7 +15,7 @@ class Service
     callback(err, data)
 
   create: (user, entity, object, callback) ->
-    log "create:", entity, object
+    log "create:", user, entity, object
     delete object.identifier
     console.log user._id
     object._user_id = new ObjectId(user._id)
