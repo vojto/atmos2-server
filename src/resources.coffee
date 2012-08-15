@@ -6,7 +6,7 @@ Service = require('./service')
 {log, log2, loge}     = require('./util')
 
 class ResourcesServer extends Server
-  constructor: (@app, options) ->
+  constructor: (@app, options = {}) ->
     @service = new ResourcesService(@app)
     @entity = options.entity
 

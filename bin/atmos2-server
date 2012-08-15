@@ -1,0 +1,12 @@
+#!/usr/bin/env node
+
+var path = require('path');
+var fs = require('fs');
+var iced = require('iced-coffee-script');
+var src = path.join(path.dirname(fs.realpathSync(__filename)), '../src');
+var Generator = require(src + '/generator');
+var optimist = require('optimist');
+var argv = optimist.argv;
+
+var generator = new Generator();
+generator.run(argv);
