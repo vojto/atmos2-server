@@ -28,26 +28,25 @@ class Application extends Server
     options.database or= 'impensi_dev'
     @_database = server.db(options.database)
 
-    @_http = Express.createServer()
-    @_http.use(Express.static(__dirname + '/../public'))
-    @_http.use(Express.bodyParser())
-    @_http.use(Express.cookieParser());
-    @_http.use(Express.session({secret: "foobar"}))
-
-    @_socketio = io.listen(@_http)
-    @_socketio.sockets.on 'connection', @did_connect
+    @http_app = Express()
+    @http_app.use(Express.static(__dirname + '/../public'))
+    @http_app.use(Express.bodyParser())
+    @http_app.use(Express.cookieParser());
+    @http_app.use(Express.session({secret: "foobar"}))
 
     # Services -- only users in this case
     @_users = new Users(@)
 
-    @_http.get '/login', @login
-    @_http.post '/sign_up', @sign_up
+    @http_app.get '/login', @login
+    @http_app.post '/sign_up', @sign_up
 
     @modules = {}
 
   start: (port) ->
-    @_http.listen(port)
-    log "Starting HTTP server on port #{port}."
+    @http_server = @http_app.listen(port)
+    @socket_server = io.listen(@http_server)
+    @socket_server.sockets.on 'connection', @did_connect
+    log "Starting HTTP and Socket.IO server on port #{port}."
 
   # -^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-
   # Interface for modules
@@ -59,7 +58,7 @@ class Application extends Server
       @modules[name] = instance
 
   route: (method, route, handler) ->
-    @_http[method].call(@_http, route, @middlewares(), handler)
+    @http_app[method].call(@http_app, route, @middlewares(), handler)
 
   collection: (name) ->
     @_database.collection(name)
@@ -124,6 +123,6 @@ class Application extends Server
 
   push_update: (collection, id, object) ->
     payload = {collection: collection, id: id, object: object}
-    @_socketio.sockets.emit 'update', payload
+    @socket_server.sockets.emit 'update', payload
 
 module.exports = Application
