@@ -21,10 +21,12 @@ Instantiate and start on your favorite port.
 
 Atmos2 comes with authentication.
 
+*(#ProTip: These are actual commands for [httpie](https://github.com/jkbr/httpie).)*
+
 Logging in:
 
-    GET /login?username=foo&password=bar
+    http get 'http://localhost:4001/login?username=foo&password=bar'
 
 Creating account:
 
-    POST /sign_up username=foo&password=bar&email=foo@bar.com
+    http post http://localhost:4001/sign_up username=foo password=bar email=foo@bar.com
